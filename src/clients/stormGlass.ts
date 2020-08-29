@@ -46,6 +46,7 @@ export class StormGlassUnexpectedResponseError extends InternalError {
  * This error type is used when something breaks before the request reaches out to the StormGlass API
  * eg: Network error, or request validation error
  */
+
 export class ClientRequestError extends InternalError {
   constructor(message: string) {
     const internalMessage =
@@ -74,7 +75,7 @@ export class StormGlass {
     'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassAPISource = 'noaa';
 
-  constructor(protected request = new HTTPUtil.Request()) {}
+  constructor(protected request = new HTTPUtil.Request()) { }
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
@@ -82,7 +83,7 @@ export class StormGlass {
         `${stormglassResourceConfig.get(
           'apiUrl'
         )}/weather/point?lat=${lat}&lng=${lng}&params=${
-          this.stormGlassAPIParams
+        this.stormGlassAPIParams
         }&source=${this.stormGlassAPISource}`,
         {
           headers: {
@@ -98,7 +99,7 @@ export class StormGlass {
       if (HTTPUtil.Request.isRequestError(err)) {
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify(err.response.data)} Code: ${
-            err.response.status
+          err.response.status
           }`
         );
       }
